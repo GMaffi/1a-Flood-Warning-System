@@ -26,3 +26,9 @@ def stations_by_distance(stations, p):
 
 def stations_within_radius(stations, centre, r):
     '''returns a list of all stations within radius r of a geographic coordinate'''
+    stations_within_radius = []
+    for i in stations:
+        if hs(i.coord,centre) < r:
+            stations_within_radius.append(i)
+            
+    return stations_within_radius
