@@ -19,7 +19,10 @@ def stations_by_distance(stations, p):
     stations_by_dist = []
 
     for i in stations:
-        station_data = (i.name, hs(p,i.coord))
+        station_data = (i, hs(p,i.coord))
         stations_by_dist.append(station_data)
 
     return sorted_by_key(stations_by_dist, 1)
+
+def stations_within_radius(stations, centre, r):
+    '''returns a list of all stations within radius r of a geographic coordinate'''
