@@ -6,6 +6,7 @@
 from floodsystem.station import MonitoringStation
 
 
+
 def test_create_monitoring_station():
 
     # Create a station
@@ -25,3 +26,10 @@ def test_create_monitoring_station():
     assert s.typical_range == trange
     assert s.river == river
     assert s.town == town
+
+def test_typical_range_consistent():
+    a = None
+    b = [1, 0.6281]
+    c = [5.8668, 6.8274]
+
+    assert typical_range_consistent(a) = False
