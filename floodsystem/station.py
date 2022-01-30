@@ -40,16 +40,21 @@ class MonitoringStation:
         return d
 
     def typical_range_consistent(self):
-
-        if self.typical_range() != None:
-
-            typ_range = self.typical_range()
-
-            if typ_range[1] > typ_range[2]:
+        '''checks if the height range data is consistent. it is inconsistent if the max height
+        is less than the min height of the data is not present'''
+        if self.typical_range != None:
+            typ_range = self.typical_range
+            if typ_range[1] > typ_range[0]:
                 return True
-
             else:
                 return False
-                
         else:
             return False
+
+def inconsistent_typical_range_stations(stations):
+    '''returns a list of the stations in the input list which have inconsistent rage data'''
+    inconsistent_stations = []
+    for i in stations:
+        if i.typical_range_consistent() == False:
+            inconsistent_stations.append(i)
+    return inconsistent_stations
