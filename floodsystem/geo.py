@@ -32,3 +32,20 @@ def stations_within_radius(stations, centre, r):
             stations_within_radius.append(i)
             
     return stations_within_radius
+
+#Task 1D
+set_river = set()
+def rivers_with_station(stations):
+    for station in stations:
+        set_river.add(station.river)
+    return set_river
+
+stations_by_rivers = {}
+def stations_by_rivers(stations):
+    for ariver in set_river:
+        list = []
+        for station in stations:
+            if station.river == ariver:
+                stations_by_rivers[ariver] = list.append(station.name)
+    return stations_by_rivers
+
