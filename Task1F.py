@@ -10,4 +10,5 @@ names = []
 for i in inconsistent_stations:
     names.append(i.name)
 
+
 print(names)
