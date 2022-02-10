@@ -48,7 +48,7 @@ def stations_by_river(stations):
         if station.river in d_river_stations:
             d_river_stations[station.river].append(station.name)
         else:
-            d_river_stations[station.river] =  [station.name]
+            d_river_stations[station.river] = [station.name]
     
     return d_river_stations
 
@@ -56,13 +56,27 @@ def stations_by_river(stations):
 def rivers_by_station_number(stations, N):
     d_river_stations = stations_by_river(stations)
     list_river_stations = d_river_stations.items()
+
+    #Create list of rivers
     list_river = []
     for tuple in list_river_stations:
 	    list_river.append(tuple[0])
+    
+    #Create list of number of stations per river
     list_number_stations = []
     for tuple in list_river_stations:
         list_number_stations.append(len(tuple[1]))
-        list_river_number_stations = list(zip(list_river, list_number_stations))
+    
+    #Combine two lists into one list
+    list_river_number_stations = list(zip(list_river, list_number_stations))
+
+    #Sort the list by number of stations
     list_river_number_stations_sorted = sorted(list_river_number_stations, key=lambda tup: tup[1], reverse=True)
-    list_most_riverstations = list_river_number_stations_sorted[0:N]
-    return list_most_riverstations
+
+    N_tuple = list_river_number_stations_sorted[N-1]
+    
+    rivers_by_station_number = []
+    for tuple in list_river_number_stations:
+            if tuple[1] >= N_tuple[1]:
+                rivers_by_station_number.append(tuple)
+    return sorted(rivers_by_station_number, key=lambda tup: tup[1], reverse=True)
