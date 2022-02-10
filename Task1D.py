@@ -1,6 +1,3 @@
-#Task1D.py
-
-from os import stat
 from floodsystem.geo import stations_by_river, rivers_with_station
 from floodsystem.stationdata import build_station_list
 

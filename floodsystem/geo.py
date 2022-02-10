@@ -12,6 +12,7 @@ from .utils import sorted_by_key  # noqa
 from haversine import haversine as hs
 from floodsystem.station import MonitoringStation
 
+
 def stations_by_distance(stations, p):
     '''returns a list of the distance from the stations to the 
     coordinate p, sorted with the closest station first'''
@@ -49,5 +50,19 @@ def stations_by_river(stations):
         else:
             d_river_stations[station.river] =  [station.name]
     
-
     return d_river_stations
+
+#Task 1E
+def rivers_by_station_number(stations, N):
+    d_river_stations = stations_by_river(stations)
+    list_river_stations = d_river_stations.items()
+    list_river = []
+    for tuple in list_river_stations:
+	    list_river.append(tuple[0])
+    list_number_stations = []
+    for tuple in list_river_stations:
+        list_number_stations.append(len(tuple[1]))
+        list_river_number_stations = list(zip(list_river, list_number_stations))
+    list_river_number_stations_sorted = sorted(list_river_number_stations, key=lambda tup: tup[1], reverse=True)
+    list_most_riverstations = list_river_number_stations_sorted[0:N]
+    return list_most_riverstations
