@@ -23,6 +23,7 @@ def test_rivers_by_station_number():
     for tuple in rivers_by_station_number(stations, 9):
         station_number.append(tuple[1])
     for i in range(1, len(station_number)):
-        current_station_number = stations[i]
-        previous_station_number = stations[i-1]
+        current_station_number = stations[i+1]
+        previous_station_number = stations[i]
         assert current_station_number[1] >= previous_station_number[1]
+
