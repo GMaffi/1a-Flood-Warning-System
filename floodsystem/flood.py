@@ -1,4 +1,5 @@
 from floodsystem.station import MonitoringStation
+from floodsystem.utils import sorted_by_key
 
 def stations_level_over_threshold(stations, tol):
     stations_over_threshold = []
@@ -8,3 +9,14 @@ def stations_level_over_threshold(stations, tol):
             stations_over_threshold.append((i, rel_level))
 
     return stations_over_threshold
+
+def stations_highest_rel_level(stations, N):
+    '''returns the N highest relative water levels and their station'''
+    stations_by_level = []
+    for i in stations:
+        rel_level = i.relative_water_level()
+        if rel_level != None:
+            stations_by_level.append((i, rel_level))
+        
+    stations_by_level = sorted_by_key(stations_by_level, 1, True)
+    return stations_by_level[:N]
