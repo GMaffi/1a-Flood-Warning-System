@@ -7,7 +7,8 @@ geographical data.
 """
 
 from re import A
-from .utils import sorted_by_key  # noqa
+from .utils import sorted_by_key  
+# noqa
 
 from haversine import haversine as hs
 from floodsystem.station import MonitoringStation

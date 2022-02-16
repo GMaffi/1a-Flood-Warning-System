@@ -42,14 +42,30 @@ class MonitoringStation:
     def typical_range_consistent(self):
         '''checks if the height range data is consistent. it is inconsistent if the max height
         is less than the min height of the data is not present'''
-        if self.typical_range != None:
-            typ_range = self.typical_range
+        typ_range = self.typical_range
+        if typ_range == None:
+            return False
+        else:
             if typ_range[1] > typ_range[0]:
                 return True
             else:
                 return False
+
+    def relative_water_level(self):
+        '''Returns the current water level relative to the typpical range where the typical minimum is
+        0 and the typical maximum is 1'''
+        if self.typical_range_consistent == False:
+            return None
+        elif self.latest_level == None:
+            return None
+        elif self.typical_range == None:
+            return None
         else:
-            return False
+            level = self.latest_level
+            typ_range = self.typical_range
+            rel_range = (level - typ_range[0])/(typ_range[1] - typ_range[0])
+            return rel_range
+
 
 def inconsistent_typical_range_stations(stations):
     '''returns a list of the stations in the input list which have inconsistent rage data'''
