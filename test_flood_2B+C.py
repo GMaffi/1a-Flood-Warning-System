@@ -11,8 +11,8 @@ def test_stations_level_over_threshold():
     '''Tests stations returned are all over the threshold stated'''
     thresh_list = (0.3, 0.5, 0.7, 1.0)
     for thresh in thresh_list:
-        stations_over_theshold = stations_level_over_threshold(stations, thresh)
-        for i in stations_over_theshold:
+        stations_over_threshold = stations_level_over_threshold(stations, thresh)
+        for i in stations_over_threshold:
             assert i[1] >= thresh
 
 

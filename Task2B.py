@@ -7,9 +7,7 @@ stations = build_station_list()
 update_water_levels(stations)
 tol = 0.8
 
-stations_over_theshold = stations_level_over_threshold(stations, tol)
+stations_over_threshold = stations_level_over_threshold(stations, tol)
 
-sorted_by_level = sorted_by_key(stations_over_theshold, 1, True)
-
-for i in sorted_by_level:
+for i in stations_over_threshold:
     print(i[0].name, i[1])
