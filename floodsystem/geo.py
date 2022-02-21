@@ -5,14 +5,11 @@
 geographical data.
 
 """
-
 from re import A
 from .utils import sorted_by_key  
 # noqa
 
 from haversine import haversine as hs
-from floodsystem.station import MonitoringStation
-
 
 def stations_by_distance(stations, p):
     '''returns a list of the distance from the stations to the 
