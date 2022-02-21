@@ -7,8 +7,8 @@ def stations_level_over_threshold(stations, tol):
         rel_level = i.relative_water_level()
         if rel_level != None and rel_level > tol:
             stations_over_threshold.append((i, rel_level))
-
-    return stations_over_threshold
+    
+    return sorted_by_key(stations_over_threshold, 1, True)
 
 def stations_highest_rel_level(stations, N):
     '''returns the N highest relative water levels and their station'''

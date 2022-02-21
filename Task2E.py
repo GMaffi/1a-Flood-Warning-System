@@ -1,23 +1,29 @@
+<<<<<<< HEAD
 from floodsystem.plot import plot_water_levels
 from floodsystem.flood import stations_highest_rel_level
 from floodsystem.stationdata import build_station_list, update_water_levels
 from datetime import date, timedelta
+=======
+import datetime
+from floodsystem.datafetcher import fetch_measure_levels
+
+from floodsystem.station import MonitoringStation
+from floodsystem.flood import stations_highest_rel_level
+from floodsystem.stationdata import build_station_list, update_water_levels
+from floodsystem.utils import sorted_by_key
+from floodsystem.plot import plot_water_levels
+>>>>>>> 6ad10b0aa38e87c91e1748420637d611d2d8297f
 
 stations = build_station_list()
 update_water_levels(stations)
 
-highest_5_stations = []
-for tuple in stations_highest_rel_level(stations, 5):
-        highest_5_stations.append(tuple[0])
+N = 5
+stations_by_rel_level = stations_highest_rel_level(stations, N)
 
-tod = date.today()
-numdays = 10
-date_list = []
-for x in range (0, numdays):
-    date_list.append(tod- timedelta(days = x))
+for i in stations_by_rel_level:
+    station = i[0]
 
-plot_water_levels(highest_5_stations, date_list)
+    dt = 10
+    dates, levels = fetch_measure_levels(station.measure_id, dt=datetime.timedelta(days=dt))
 
-if __name__ == "__main__":
-    print("*** Task 2E: CUED Part IA Flood Warning System ***")
-    run()
+    plot_water_levels(station, dates, levels)
