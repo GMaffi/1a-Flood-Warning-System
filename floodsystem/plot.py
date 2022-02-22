@@ -3,7 +3,8 @@ from datetime import datetime, timedelta
 from floodsystem.station import MonitoringStation
 
 def plot_water_levels(station, dates, levels):
-
+    '''plots the water levels and typpical range for the station with the entered data'''
+    
     #plot river level graph
     plt.plot(dates, levels)
 
