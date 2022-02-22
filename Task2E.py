@@ -1,11 +1,7 @@
-import datetime
-from floodsystem.datafetcher import fetch_measure_levels
-
-from floodsystem.station import MonitoringStation
+from floodsystem.plot import plot_water_levels
 from floodsystem.flood import stations_highest_rel_level
 from floodsystem.stationdata import build_station_list, update_water_levels
-from floodsystem.utils import sorted_by_key
-from floodsystem.plot import plot_water_levels
+from datetime import date, timedelta
 
 stations = build_station_list()
 update_water_levels(stations)
