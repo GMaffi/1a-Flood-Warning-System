@@ -11,7 +11,7 @@ stations = build_station_list()
 update_water_levels(stations)
 
 N = 5
-stations_by_rel_level = stations_highest_rel_level(stations, N)
+stations_by_rel_level = stations_highest_rel_level(stations, N, 20)
 
 for i in stations_by_rel_level:
     station = i[0]
