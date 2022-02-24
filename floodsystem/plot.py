@@ -1,9 +1,11 @@
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 from floodsystem.station import MonitoringStation
+from floodsystem.analysis import polyfit
+import matplotlib.dates
 
 def plot_water_levels(station, dates, levels):
-    '''plots the water levels and typpical range for the station with the entered data'''
+    '''plots the water levels and typical range for the station with the entered data'''
     
     #plot river level graph
     plt.plot(dates, levels)
@@ -21,7 +23,22 @@ def plot_water_levels(station, dates, levels):
     #add titles and labels
     plt.xlabel('date')
     plt.ylabel('water level (m)')
-    plt.xticks(rotation=45);
+    plt.xticks(rotation=45)
     plt.title(station.name)
 
     plt.show()
+
+def plot_water_level_with_fit(station, dates, levels, p):
+    d_float = matplotlib.dates.date2num(dates)
+    poly, d0 = polyfit(dates, levels, p)
+
+    plt.plot(dates, levels)
+    plt.plot(dates, poly(d_float - d_float[0]))
+
+    plt.xlabel('date')
+    plt.ylabel('water level (m)')
+    plt.xticks(rotation=45)
+    plt.title(station.name)
+
+    plt.show()
+
