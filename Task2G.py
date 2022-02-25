@@ -1,5 +1,5 @@
 """
-Flood warning needs to be by river and not by station
+Flood warning needs to be by town
 
 Risk of flooding greatest when:
 Water level high and rising and therefore data can be extrapolated to predict it will be very high in the future (using coefficients of polynomial in 2f)
@@ -13,6 +13,7 @@ Severe, high, moderate, low ratings dependent on threshold water levels - these 
 Use extrapolation to predict the maximum water level expected and then assign rating based on the thresholds
 
 """
+from types import NoneType
 from floodsystem.station import MonitoringStation
 from floodsystem.flood import stations_highest_rel_level, stations_level_over_threshold
 from floodsystem.stationdata import build_station_list, update_water_levels
@@ -23,12 +24,6 @@ import numpy as np
 
 stations = build_station_list()
 update_water_levels(stations)
-
-# initial guess for warning water level thresholds
-severe = 5.0
-high = 4.0
-moderate = 2.5
-low = 1.5
 
 # initial time period we want to examine (whole time period = 2*dt days)
 dt = 2
@@ -54,17 +49,56 @@ for i in p_coeff:
     y = poly(x)
     max_water_level.append(max(y))
 
-# print the flood warning risk and river
+# not every station  has a town
+# there may be cases where there are different alert levels for the town - only the highest should be shown
+# ideally should sort towns by risk level on output
+
+set_towns_severe = set()
+set_towns_high = set()
+set_towns_moderate = set()
+set_towns_low =  set()
+
+# initial guess for warning water level thresholds
+severe = 5.0
+high = 4.0
+moderate = 2.5
+low = 1.5
+
+# print the towns for each risk level
 for x, y in zip(stations_by_rel_level, max_water_level):
     station = x[0]
+    if station.town == None:
+        pass
     if y >= severe:
-        print("SEVERE FLOOD WARNING RISK ON " + station.river)
+        set_towns_severe.add(station.town)
     elif y >= high:
-        print("HIGH FLOOD WARNING RISK ON " + station.river)
+        set_towns_high.add(station.town)
     elif y >= moderate:
-        print("MODERATE FLOOD WARNING ALERT ON " + station.river)
+        set_towns_moderate.add(station.town)
     elif y >= low:
-        print("LOW FLOOD WARNING ALERT ON " + station.river)
+        set_towns_low.add(station.town)
+    else:
+        pass
 
+print("TOWNS WITH SEVERE FLOOD RISK: ")
+print(set_towns_severe)
+print("TOWNS WITH HIGH FLOOD RISK: ")
+print(set_towns_high)
+print("TOWNS WITH MODERATE FLOOD RISK: ")
+print(set_towns_moderate)
+print("TOWNS WITH LOW FLOOD RISK: ")
+print(set_towns_low)
 # Could use 2f to test the values of dt and p to give the optimum polynomial fit over a time range 2*dt
 # Could see if we could increase N, the number of stations being examined, or try to create a list of stations over a minimum value
+
+# Using below code all stations appear have a town associated 
+"""set_towns = set()
+list_stations_no_town = []
+for station in stations:
+    if station.town == NoneType:
+        list_stations_no_town.append(station.name)
+    else:
+        set_towns.add(station.town)
+print(len(set_towns))
+print(len(list_stations_no_town))
+"""
