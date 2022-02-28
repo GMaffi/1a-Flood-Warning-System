@@ -13,7 +13,7 @@ Severe, high, moderate, low ratings dependent on threshold water levels - these 
 Use extrapolation to predict the maximum water level expected and then assign rating based on the thresholds
 
 """
-from types import NoneType
+#from types import NoneType
 from floodsystem.station import MonitoringStation
 from floodsystem.flood import stations_highest_rel_level, stations_level_over_threshold
 from floodsystem.stationdata import build_station_list, update_water_levels
