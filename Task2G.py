@@ -14,6 +14,7 @@ Use extrapolation to predict the maximum water level expected and then assign ra
 
 """
 from types import NoneType
+from unittest import defaultTestLoader
 from floodsystem.station import MonitoringStation
 from floodsystem.flood import stations_highest_rel_level, stations_level_over_threshold
 from floodsystem.stationdata import build_station_list, update_water_levels
@@ -24,6 +25,11 @@ import numpy as np
 
 stations = build_station_list()
 update_water_levels(stations)
+for station in stations:
+    if station.latest_level == None:
+        stations.remove(station)
+    elif station.latest_level >= 20:
+        stations.remove(station)
 
 # initial time period we want to examine (whole time period = 2*dt days)
 dt = 2
@@ -31,7 +37,7 @@ dt = 2
 # generate list of stations above a threshold of 0.8m
 # fetch_measure_levels funciton only works when tol above a certain value - can only take a maximum number of stations
 # therefore use stations_by_rel_level
-N = 50
+N = 100
 stations_by_rel_level = stations_highest_rel_level(stations, N, 20)
 
 # generate list of tuples of polynomial coefficients, using value of dt and p from 2f intially
@@ -39,7 +45,11 @@ p_coeff = []
 for i in stations_by_rel_level:
     station = i[0]
     dates, levels = fetch_measure_levels(station.measure_id, dt=datetime.timedelta(days=dt))
-    p_coeff.append(polyfit_coeff(dates, levels, 4))
+    for date in dates:
+        if date == None:
+           break
+        else:
+            p_coeff.append(polyfit_coeff(dates, levels, 4))
 
 # compute the maximum water level expected when the data is extrapolated dt days into future
 x = np.linspace(0, dt, 10)
@@ -49,20 +59,16 @@ for i in p_coeff:
     y = poly(x)
     max_water_level.append(max(y))
 
-# not every station  has a town
-# there may be cases where there are different alert levels for the town - only the highest should be shown
-# ideally should sort towns by risk level on output
-
 set_towns_severe = set()
 set_towns_high = set()
 set_towns_moderate = set()
 set_towns_low =  set()
 
 # initial guess for warning water level thresholds
-severe = 5.0
-high = 4.0
-moderate = 2.5
-low = 1.5
+severe = 3.5
+high = 2.5
+moderate = 2.0
+low = 1.2
 
 # print the towns for each risk level
 for x, y in zip(stations_by_rel_level, max_water_level):
@@ -80,25 +86,23 @@ for x, y in zip(stations_by_rel_level, max_water_level):
     else:
         pass
 
+list_towns_severe = list(filter(None, set_towns_severe))
+list_towns_high = list(filter(None, set_towns_high))
+list_towns_moderate = list(filter(None, set_towns_moderate))
+list_towns_low = list(filter(None, set_towns_low))
+
 print("TOWNS WITH SEVERE FLOOD RISK: ")
-print(set_towns_severe)
+print(sorted(list_towns_severe))
 print("TOWNS WITH HIGH FLOOD RISK: ")
-print(set_towns_high)
+print(sorted(list_towns_high))
 print("TOWNS WITH MODERATE FLOOD RISK: ")
-print(set_towns_moderate)
+print(sorted(list_towns_moderate))
 print("TOWNS WITH LOW FLOOD RISK: ")
-print(set_towns_low)
+print(sorted(list_towns_low))
+
+print(len(list_towns_moderate))
+
+# Potential improvements:
 # Could use 2f to test the values of dt and p to give the optimum polynomial fit over a time range 2*dt
 # Could see if we could increase N, the number of stations being examined, or try to create a list of stations over a minimum value
-
-# Using below code all stations appear have a town associated 
-"""set_towns = set()
-list_stations_no_town = []
-for station in stations:
-    if station.town == NoneType:
-        list_stations_no_town.append(station.name)
-    else:
-        set_towns.add(station.town)
-print(len(set_towns))
-print(len(list_stations_no_town))
-"""
+# Threshold water levels will differ based on stations - could see if there was a way to input more data per station to account for this
