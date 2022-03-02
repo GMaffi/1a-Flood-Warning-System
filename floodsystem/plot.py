@@ -35,6 +35,16 @@ def plot_water_level_with_fit(station, dates, levels, p):
     plt.plot(dates, levels)
     plt.plot(dates, poly(d_float - d_float[0]))
 
+    #plot typical low and high
+    typ_range = station.typical_range
+    typ_min = []
+    typ_max = []
+    for i in range(len(dates)):
+        typ_min.append(typ_range[0])
+        typ_max.append(typ_range[1])
+    plt.plot(dates, typ_min, 'b--')
+    plt.plot(dates, typ_max, 'b--')
+
     plt.xlabel('date')
     plt.ylabel('water level (m)')
     plt.xticks(rotation=45)
